@@ -1,0 +1,40 @@
+package dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import dto.CovidDTO;
+
+public class Coviddao {
+	public int insert(List<Map<String,String>> covidlist) {
+		try(SqlSession session = MBConn.getSession()){
+			for(Map<String,String> covidmap : covidlist) {
+				//한건 조회
+				session.selectOne("CovidMapper.selectone", covidmap.get("stateDt"));
+				
+				//데이터가 없다면
+				session.insert("CovidMapper.insert", covidmap);
+				
+				
+				//데이터가 있다면
+				session.update("CovidMapper.insert", covidmap);
+			}
+		}
+		return 0;
+	}
+	
+	
+	public List<CovidDTO> selectlist(Map<String,String> covidmap) {
+		try(SqlSession session = MBConn.getSession()){
+			return session.selectList("CovidMapper.selectlist", covidmap);
+		}
+	}
+	
+	
+	
+	
+	
+	
+}

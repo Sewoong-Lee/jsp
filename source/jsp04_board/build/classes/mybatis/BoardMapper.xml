@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardMapper">
+	<insert id="insert" parameterType="dto.BoardDTO">
+		<!-- 먼저 bnum을 구해서 dto에 셋팅 -->
+		<selectKey keyProperty="bnum" resultType="int" order="BEFORE">
+			select board_bnum.nextval from dual
+		</selectKey>
+		<!-- 원본글일때 -->
+		<if test="relevel==0">
+		insert into board(bnum, userid, subject, content, ip, ref, restep, relevel)
+		values (#{bnum}, #{userid},#{subject}, #{content}, #{ip}, #{bnum}, #{restep}, #{relevel})
+		</if>
+		<!--댓글일때 -->
+		<if test="relevel!=0">
+		insert into board(bnum, userid, subject, content, ip, ref, restep, relevel)
+		values (#{bnum}, #{userid},#{subject}, #{content}, #{ip}, #{ref}, #{restep}, #{relevel})
+		</if>
+	</insert>
+	
+	
+	<!-- 검색 조회조건 sql문 생성 -->
+	<sql id="findsql">
+		where 1=1
+		<if test="findkey=='userid'">
+			and userid like '%' || #{findvalue} || '%'
+		</if>
+		<if test="findkey=='subject'">
+			and subject like '%' || #{findvalue} || '%'
+		</if>
+		<if test="findkey=='content'">
+			and content like '%' || #{findvalue} || '%'
+		</if>
+		<if test="findkey=='subcon'">
+			and subject like '%' || #{findvalue} || '%'
+			   or content like '%' || #{findvalue} || '%'
+		</if>
+		and relevel = 0 
+	</sql>
+	
+	<!-- 전체 게시물 수 -->
+	<select id="selecttotcnt" resultType="int">
+		SELECT COUNT(*) totcnt
+		FROM board
+			<include refid="findsql"/>
+		
+	</select>
+	
+	<!-- 원본 조회 -->
+	<select id="selectlist" resultType="java.util.HashMap">
+	SELECT * 
+	FROM (SELECT ROWNUM rwon, b.*
+	        FROM (SELECT * FROM board
+	                  <include refid="findsql"/>
+						order by ref desc) b)
+	where rwon BETWEEN #{startno} and #{endno}
+	</select>
+	
+	<update id="update">
+		UPDATE board
+		set subject = #{subject}, 
+		content = #{content},
+		ip = #{ip},
+		modifydate= sysdate
+		WHERE bnum = #{bnum}
+	</update>
+	
+	<!-- 댓글 조회 -->
+	<!-- 원본글은 bnum과 ref가 같기 때문에 -->
+	<select id="selectreply" resultType="dto.BoardDTO">
+		SELECT * FROM board
+		where ref = #{bnum}
+		and relevel != 0
+		order by restep
+	</select>
+	
+	<select id="selectone" resultType="java.util.HashMap">
+	SELECT *
+	FROM board b 
+	left join boardfile f on (b.bnum = f.bnum)
+	WHERE b.bnum = #{bnum}
+	</select>
+	
+	<!-- 글 순서 +1 : 중간에 댓글의 댓글이 추가 되는 경우 -->
+	<update id="updaterestep">
+	UPDATE board
+	set restep = restep + 1
+	WHERE ref = #{ref}
+	and restep > #{restep}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM board WHERE bnum = #{bnum}
+	</delete>
+	
+	<!-- 댓글 한건 조회 -->
+	<select id="selectonerepy" resultType="dto.BoardDTO">
+	SELECT *
+	FROM board
+	WHERE bnum = #{bnum}
+	</select>
+	
+	<!-- 조회수 +1 -->
+	<update id="readcountadd">
+	UPDATE board
+	set readcount = readcount + 1
+	WHERE bnum = #{bnum}
+	</update>
+	
+	
+</mapper>

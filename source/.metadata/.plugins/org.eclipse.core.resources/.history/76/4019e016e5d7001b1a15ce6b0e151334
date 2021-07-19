@@ -1,0 +1,13 @@
+package ex12_api;
+
+public class Ex04_Selenium {
+
+	public static void main(String[] args) {
+		// selenium(Wep scraping)
+		System.setProperty("webdriver.chrome.driver", "D:/크롬 드라이버/chromedriver.exe");
+		
+		
+		
+	}
+
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CovidMapper">
+	<insert id="insert" >
+		INSERT INTO covid (stateDt, decideCnt, clearCnt, examCnt, deathCnt,
+                            careCnt, resutlNegCnt, accExamCnt, accExamCompCnt, accDefRate)  
+		VALUES (#{stateDt}, #{decideCnt}, #{clearCnt}, #{examCnt}, #{deathCnt}, 
+				#{careCnt}, #{resutlNegCnt}, #{accExamCnt}, #{accExamCompCnt}, #{accDefRate})
+	</insert>
+
+</mapper>

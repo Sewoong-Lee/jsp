@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MonsterMapper">
+	<insert id="insert">
+		INSERT INTO monster (mcode,tcode,mname)  VALUES (#{mcode},#{tcode},#{mname})
+	</insert>
+	<update id="update">
+		UPDATE monster  SET mname = #{mname},
+		tcode = #{tcode} 
+		WHERE mcode = #{mcode}
+	</update>
+	<delete id="delete">
+		DELETE FROM monster WHERE mcode = #{mcode}
+	</delete>
+	<select id="selectone" resultType="model.MonsterDTO">
+		SELECT * FROM monster
+		WHERE mcode = #{mcode}
+	</select>
+	<select id="selectlist" resultType="model.MonsterDTO">
+		select * from (
+		select m.mcode, p.TCODE, p.TNAME, m.MNAME
+		from ptype2 p INNER JOIN monster m ON (p.tcode = m.tcode)) 
+		WHERE ${findkey}  like '%' || #{findvalue} || '%' 
+		order by mcode 
+	</select>
+	<select id="selecttypecount" resultType="int">
+		SELECT  COUNT(*) cnt
+		FROM MONSTER
+		WHERE tcode = #{tcode}
+	</select>
+	
+	
+	
+</mapper>

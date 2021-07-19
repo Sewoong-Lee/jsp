@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SubjectMapper">
+		<insert id="insert">
+		INSERT INTO subject (subcode,subname,price,filename,kwcode)  
+		VALUES (#{subcode},#{subname},#{price},#{filename},#{kwcode})
+	</insert>
+	
+	<update id="update">
+		UPDATE subject  SET subname = #{subname},
+		price = #{price},
+		filename = #{filename},
+		kwcode = #{kwcode}
+		WHERE subcode = #{subcode}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM subject WHERE subcode = #{subcode}
+	</delete>
+	
+	<select id="selectone" resultType="java.util.HashMap">
+		SELECT s.subcode, s.subname, s.price, s.filename, k.KWNAME, k.KWCODE
+		FROM subject s 
+		inner join keyword k on (s.KWCODE = k.KWCODE)
+		WHERE s.subcode = #{subcode}
+	</select>
+	
+	<select id="selectlist" resultType="java.util.HashMap">
+		SELECT s.subcode, s.subname, s.price, s.filename, k.KWNAME, k.KWCODE
+		FROM subject s 
+		inner join keyword k on (s.KWCODE = k.KWCODE)
+		<if test="findkey=='subcode'">
+			where s.subcode like '%' || #{findvalue}  ||'%'
+		</if>
+		<if test="findkey=='subname'">
+			where s.subname like '%' || #{findvalue}  ||'%'
+		</if>
+		<if test="findkey=='kwname'">
+			where k.kwname like '%' || #{findvalue}  ||'%'
+		</if>
+		<if test="orderby=='lowprice'">
+			order by s.price
+		</if>
+		<if test="orderby=='highprice'">
+			order by s.price desc
+		</if>	
+		
+	</select>
+	
+	
+	
+</mapper>

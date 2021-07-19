@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CovidMapper">
+	<insert id="insert">
+		INSERT INTO covid (stateDt, decideCnt, clearCnt, examCnt, deathCnt,
+                            careCnt, resutlNegCnt, accExamCnt, accExamCompCnt, accDefRate)  
+		VALUES (#{stateDt}, #{decideCnt}, #{clearCnt}, #{examCnt}, #{deathCnt}, 
+				#{careCnt}, #{resutlNegCnt}, #{accExamCnt}, #{accExamCompCnt}, #{accDefRate})
+	</insert>
+	
+	<select id="selectlist" resultType="dto.CovidDTO">
+		SELECT * FROM covid
+		<if test="startdate != ''">
+		WHERE stateDt BETWEEN #{startdate} and #{enddate}
+		</if>
+		ORDER by stateDt desc
+	</select>
+	
+	<select id="selectone" resultType="java.util.Map">
+		SELECT * FROM covid
+		WHERE stateDt = #{stateDt}
+	</select>
+	
+	<update id="update">
+		UPDATE covid
+		set
+		decideCnt = #{decideCnt},
+		clearCnt = #{clearCnt},
+		examCnt = #{examCnt},
+		deathCnt = #{deathCnt},
+		careCnt = #{careCnt},
+		resutlNegCnt = #{resutlNegCnt},
+		accExamCnt = #{accExamCnt},
+		accExamCompCnt = #{accExamCompCnt},
+		accDefRate = #{accDefRate}
+		WHERE stateDt = #{stateDt}
+	</update>
+
+</mapper>

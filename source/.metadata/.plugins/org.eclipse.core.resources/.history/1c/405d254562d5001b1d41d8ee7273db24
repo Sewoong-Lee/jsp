@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 저장시 null 허용 -->
+	<settings>
+		<setting name="jdbcTypeForNull" value="Null"/>
+	</settings>
+	<!-- 경로 알리아스 설정 -->
+	<typeAliases>
+		<typeAlias type="dto.CovidDTO" alias="CovidDTO"/>
+	</typeAliases>
+	
+ <environments default="development">
+    <environment id="development">
+   	 <transactionManager type="MANAGED"/>
+      <!-- <transactionManager type="JDBC"/> -->
+      <dataSource type="UNPOOLED">
+        <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+        <property name="username" value="hr"/>
+        <property name="password" value="hr"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="mybatis/CovidMapper.xml"/>
+  </mappers>
+</configuration>

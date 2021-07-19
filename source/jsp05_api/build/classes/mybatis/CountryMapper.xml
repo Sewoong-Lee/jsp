@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CountryMapper">
+	<insert id="insert">
+		INSERT INTO countrycovid (sfty_notice_id, continent_cd, continent_eng_nm, continent_nm, country_eng_nm,
+                            country_iso_apl2, country_nm, file_cnt, file_download_url, file_path,html_origin_cn,
+                            title, txt_origin_cn, wrt_dt)
+		VALUES (#{sfty_notice_id},#{continent_cd},#{continent_eng_nm},#{continent_nm},#{country_eng_nm},
+				#{country_iso_apl2},#{country_nm},#{file_cnt},#{file_download_url},#{file_path},
+				#{html_origin_cn},#{title},#{txt_origin_cn},#{wrt_dt})
+	</insert>
+	
+	<select id="selectone" resultType="java.util.Map">
+		<!-- SELECT * FROM countrycovid
+		WHERE sfty_notice_id = #{sfty_notice_id} -->
+		
+		SELECT sfty_notice_id, continent_cd, continent_eng_nm, continent_nm,
+				 country_eng_nm, country_nm, file_cnt, file_download_url,
+				 file_path, txt_origin_cn, wrt_dt,
+				<!--  html_origin_cn의 크기가 너무커서 한번에 못읽음 clob 버퍼 사용 -->
+				dbms_lob.substr(html_origin_cn, 2000) html_origin_cn 
+				<!-- DBMS_LOB.SUBSTR(html_origin_cn, 3000, 1) as html_origin_cn1,
+				DBMS_LOB.SUBSTR(html_origin_cn, 3000, 3001) as html_origin_cn2 -->
+		FROM countrycovid
+		WHERE sfty_notice_id = #{sfty_notice_id}
+	</select>
+	
+	<update id="update">
+		UPDATE countrycovid
+		set 
+		continent_cd = #{continent_cd},
+		continent_eng_nm =  #{continent_eng_nm},
+		continent_nm =  #{continent_nm},
+		country_eng_nm =  #{country_eng_nm},
+		country_iso_apl2 =  #{country_iso_apl2},
+		country_nm =  #{country_nm},
+		file_cnt =  #{file_cnt},
+		file_download_url =  #{file_download_url},
+		file_path = #{file_path},
+		html_origin_cn =  #{html_origin_cn},
+		title =  #{title},
+		txt_origin_cn  =  #{txt_origin_cn},
+		wrt_dt =  #{wrt_dt}
+		WHERE sfty_notice_id = #{sfty_notice_id}
+	</update>
+	
+	<select id="selectlist" resultType="java.util.Map">
+		SELECT sfty_notice_id, wrt_dt, continent_eng_nm, country_eng_nm, country_nm, title
+		FROM countrycovid 
+		<if test="countryname != ''">
+		WHERE country_nm  like '%' || #{countryname} || '%'
+		</if>
+		order by  wrt_dt DESC
+	</select>
+
+</mapper>

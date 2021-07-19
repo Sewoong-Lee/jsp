@@ -1,0 +1,17 @@
+package dto;
+
+public class CovidDTO {
+	private String stateDt;
+	private int stateTime;
+	private int decideCnt;  //확진자수
+	private int accDefRate; 
+	private int clearCnt;
+	private int examCnt;
+	private int accExamCnt;
+	private int deathCnt;
+	private int resutlNegCnt;
+	private int accExamCompCnt;
+	private int careCnt;
+	private int createDt;
+	private int updateDt;
+}

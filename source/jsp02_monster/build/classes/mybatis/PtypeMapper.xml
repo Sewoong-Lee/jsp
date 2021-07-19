@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PtypeMapper">
+	<insert id="insert">
+		INSERT INTO ptype2 (tcode,tname)  VALUES (#{tcode}, #{tname})
+	</insert>
+	<update id="update">
+		UPDATE ptype2  SET tname = #{tname} 
+		WHERE tcode = #{tcode}
+	</update>
+	<delete id="delete">
+		DELETE FROM ptype2 WHERE tcode = #{tcode}
+	</delete>
+	<select id="selectone" resultType="model.PtypeDTO">
+		SELECT * FROM ptype2
+		WHERE tcode = #{tcode}
+	</select>
+	
+<!-- ${} : '' 없이
+	#{} : 데이터 형에 따라 '' 자동 붙임 -->
+	
+	<select id="selectlist" resultType="model.PtypeDTO">
+		SELECT * FROM ptype2
+		WHERE ${findkey}  like '%' || #{findvalue} || '%'
+		order by tcode
+	</select>
+</mapper>

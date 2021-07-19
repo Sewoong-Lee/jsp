@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="KeywordMapper">
+	<insert id="insert">
+		INSERT INTO keyword (kwcode,kwname)  VALUES (#{kwcode},#{kwname})
+	</insert>
+	
+	<update id="update">
+		UPDATE keyword  SET kwname = #{kwname}
+		WHERE kwcode = #{kwcode}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM keyword WHERE kwcode = #{kwcode}
+	</delete>
+	<select id="selectone" resultType="model.KeywordDTO">
+		SELECT * FROM keyword
+		WHERE kwcode = #{kwcode}
+	</select>
+	
+	<select id="selectlist" resultType="model.KeywordDTO">
+		<!-- select * from (
+		select m.mcode, p.TCODE, p.TNAME, m.MNAME
+		from ptype2 p INNER JOIN monster m ON (p.tcode = m.tcode)) 
+		WHERE ${findkey}  like '%' || #{findvalue} || '%' 
+		order by mcode  -->
+		SELECT * FROM keyword
+	</select>
+	
+	
+	
+	
+</mapper>

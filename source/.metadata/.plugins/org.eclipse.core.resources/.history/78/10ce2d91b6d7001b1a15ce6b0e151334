@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CovidMapper">
+	<insert id="insert">
+		INSERT INTO covid (stateDt, decideCnt, clearCnt, examCnt, deathCnt,
+                            careCnt, resutlNegCnt, accExamCnt, accExamCompCnt, accDefRate)  
+		VALUES (#{stateDt}, #{decideCnt}, #{clearCnt}, #{examCnt}, #{deathCnt}, 
+				#{careCnt}, #{resutlNegCnt}, #{accExamCnt}, #{accExamCompCnt}, #{accDefRate})
+	</insert>
+	
+	<!-- 알리라스로 바꿔서 CovidDTO만 씀 -->
+	<select id="selectlist" resultType="CovidDTO">
+		<!-- SELECT * FROM covid
+		<if test="startdate != ''">
+		WHERE stateDt BETWEEN #{startdate} and #{enddate}
+		</if>
+		ORDER by stateDt desc -->
+		
+		<!-- 전날 데이터와 비교하여 일일 확진자수 계산하여 출력 -->
+		SELECT  lag(decideCnt) over(ORDER by stateDt desc) - c.decideCnt diffcnt , c.*
+		FROM covid c
+		<if test="startdate != ''">
+		WHERE c.stateDt BETWEEN #{startdate} and #{enddate}
+		</if>
+		ORDER by c.stateDt desc
+		
+	</select>
+	
+	<select id="selectone" resultType="java.util.Map">
+		SELECT * FROM covid
+		WHERE stateDt = #{stateDt}
+	</select>
+	
+	<update id="update">
+		UPDATE covid
+		set
+		decideCnt = #{decideCnt},
+		clearCnt =  #{clearCnt},
+		examCnt =  #{examCnt},
+		deathCnt =  #{deathCnt},
+		careCnt =  #{careCnt},
+		resutlNegCnt =  #{resutlNegCnt},
+		accExamCnt =  #{accExamCnt},
+		accExamCompCnt =  #{accExamCompCnt},
+		accDefRate = #{accDefRate}
+		WHERE stateDt = #{stateDt}
+	</update>
+
+</mapper>

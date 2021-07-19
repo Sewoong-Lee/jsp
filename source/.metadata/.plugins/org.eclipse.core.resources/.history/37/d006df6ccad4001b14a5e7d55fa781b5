@@ -1,0 +1,14 @@
+package dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+public class Coviddao {
+	public int insert(Map<String,String> covidmap) {
+		try(SqlSession session = MBConn.getSession()){
+			return session.insert("CovidMapper.insert", covidmap);
+		}
+	}
+}

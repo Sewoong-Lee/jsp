@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GuestMapper">
+	<insert id="insert">
+		INSERT INTO guestbook (SEQ,nicname,email,CONTENT)  
+		VALUES (guest_seq.NEXTVAL,#{nicname},#{email},#{content})
+	</insert>
+	<update id="update">
+		UPDATE guestbook  SET nicname = #{nicname}, 
+		email = #{email}, content = #{content} WHERE SEQ = #{seq}
+	</update>
+	<delete id="delete">
+		DELETE FROM guestbook WHERE seq = #{seq}
+	</delete>
+	<select id="selectone" resultType="ex10_mybatis.GuestBookDTO">
+		SELECT * FROM guestbook
+		where seq = #{seq}
+	</select>
+	<select id="selectlist" resultType="ex10_mybatis.GuestBookDTO">
+		SELECT * FROM guestbook
+	</select>
+</mapper>

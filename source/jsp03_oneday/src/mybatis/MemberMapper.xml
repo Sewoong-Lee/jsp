@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberMapper">
+	<insert id="insert">
+		INSERT INTO member (userid,passwd,salt,name)  
+		VALUES (#{userid},#{passwd},#{salt},#{name})
+	</insert>
+	
+	<update id="update">
+		UPDATE member  SET passwd = #{passwd},
+		name = #{name}
+		WHERE userid = #{userid}
+	</update>
+	<delete id="delete">
+		DELETE FROM member WHERE userid = #{userid}
+	</delete>
+	
+	<select id="selectone" resultType="model.MemberDTO">
+		SELECT * FROM member
+		WHERE userid = #{userid}
+	</select>
+	
+	<select id="selectlist" resultType="model.MemberDTO">
+<!-- 		select * from (
+		select m.mcode, p.TCODE, p.TNAME, m.MNAME
+		from ptype2 p INNER JOIN monster m ON (p.tcode = m.tcode)) 
+		WHERE ${findkey}  like '%' || #{findvalue} || '%' 
+		order by mcode  -->
+		SELECT * FROM member
+	</select>
+	
+	
+	
+	
+</mapper>
